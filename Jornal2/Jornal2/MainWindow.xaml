@@ -3,69 +3,111 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.microsoft.com/2006/xaml/markup-compatibility"
-     
         xmlns:local="clr-namespace:Jornal2"
-        
-        Title="Журнал студентов" Height="600" Width="900">
-        
-     
+       
+        Title="Журнал студентов" Height="650" Width="950">
 
     <Window.Resources>
+        <!-- Фиолетовые цвета -->
+        <SolidColorBrush x:Key="PurpleColor" Color="#9D00FF"/>
+        <SolidColorBrush x:Key="DarkPurple" Color="#6A00B8"/>
+        <SolidColorBrush x:Key="LightPurple" Color="#C07CFF"/>
+
+        <!-- Стили -->
         <Style TargetType="Button">
             <Setter Property="Margin" Value="5"/>
             <Setter Property="Padding" Value="10,5"/>
+            <Setter Property="Background" Value="{StaticResource PurpleColor}"/>
+            <Setter Property="Foreground" Value="Black"/>
+            <Setter Property="BorderBrush" Value="{StaticResource DarkPurple}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="FontWeight" Value="Bold"/>
         </Style>
+
         <Style TargetType="TextBlock">
             <Setter Property="Margin" Value="5"/>
+            <Setter Property="Foreground" Value="Black"/>
         </Style>
+
         <Style TargetType="TextBox">
             <Setter Property="Margin" Value="5"/>
             <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Background" Value="#222222"/>
+            <Setter Property="Foreground" Value="Black"/>
+            <Setter Property="BorderBrush" Value="{StaticResource PurpleColor}"/>
         </Style>
+
         <Style TargetType="ComboBox">
             <Setter Property="Margin" Value="5"/>
+            <Setter Property="Background" Value="#222222"/>
+            <Setter Property="Foreground" Value="Black"/>
+            <Setter Property="BorderBrush" Value="{StaticResource PurpleColor}"/>
         </Style>
+
         <Style TargetType="DataGrid">
             <Setter Property="Margin" Value="5"/>
+            <Setter Property="Background" Value="#222222"/>
+            <Setter Property="Foreground" Value="Black"/>
+            <Setter Property="BorderBrush" Value="{StaticResource PurpleColor}"/>
         </Style>
     </Window.Resources>
 
-    <Grid>
+    <Grid Background="#111111">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="200"/>
+            <ColumnDefinition Width="220"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
-
+        <!-- Левая панель навигации -->
         <StackPanel Grid.Column="0" Background="#000000">
+            <Border Background="{StaticResource PurpleColor}" Height="50" 
+                    Margin="0,0,0,10">
+                <TextBlock Text="НАВИГАЦИЯ" 
+                         Foreground="White"
+                         FontSize="16"
+                         FontWeight="Bold"
+                         HorizontalAlignment="Center"
+                         VerticalAlignment="Center"/>
+            </Border>
+
             <Button x:Name="btnStudents" Content="Студенты" 
                     Click="BtnStudents_Click" Height="40"/>
+            <Button x:Name="btnTeachers" Content="Преподаватели" 
+                    Click="BtnTeachers_Click" Height="40"/>
             <Button x:Name="btnSubjects" Content="Предметы" 
                     Click="BtnSubjects_Click" Height="40"/>
-            
             <Button x:Name="btnGrades" Content="Оценки" 
                     Click="BtnGrades_Click" Height="40"/>
             <Button x:Name="btnAttendance" Content="Посещаемость" 
                     Click="BtnAttendance_Click" Height="40"/>
         </StackPanel>
 
-   
+        <!-- Правая панель контента -->
         <Grid Grid.Column="1">
-            
+            <!-- Студенты -->
             <StackPanel x:Name="studentsPanel" Visibility="Collapsed">
+                <Border Background="{StaticResource PurpleColor}" 
+                        Margin="0,0,0,10" Padding="10">
+                    <TextBlock Text="УПРАВЛЕНИЕ СТУДЕНТАМИ" 
+                             Foreground="White"
+                             FontSize="16"
+                             FontWeight="Bold"/>
+                </Border>
+
                 <StackPanel Orientation="Horizontal" Margin="5">
                     <TextBlock Text="Имя:" VerticalAlignment="Center"/>
-                    <TextBox x:Name="txtStudentName" Width="150"/>
+                    <TextBox x:Name="txtStudentName" Width="200"/>
                     <TextBlock Text="Группа:" VerticalAlignment="Center" Margin="10,0,0,0"/>
-                    <TextBox x:Name="txtStudentGroup" Width="100"/>
-                    <Button x:Name="btnAddStudent" Content="Добавить" Click="BtnAddStudent_Click"/>
+                    <TextBox x:Name="txtStudentGroup" Width="120"/>
+                    <Button x:Name="btnAddStudent" Content="Добавить студента" 
+                            Click="BtnAddStudent_Click" Margin="10,0,0,0"/>
                 </StackPanel>
 
                 <DataGrid x:Name="dgStudents" AutoGenerateColumns="False" Height="400">
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="50"/>
                         <DataGridTextColumn Header="Имя" Binding="{Binding Name}" Width="*"/>
-                        <DataGridTextColumn Header="Группа" Binding="{Binding Group}" Width="100"/>
+                        <DataGridTextColumn Header="Группа" Binding="{Binding Group}" Width="150"/>
                         <DataGridTemplateColumn Header="Действия" Width="100">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
@@ -77,18 +119,65 @@
                 </DataGrid>
             </StackPanel>
 
-           
+            <!-- Преподаватели -->
+            <StackPanel x:Name="teachersPanel" Visibility="Collapsed">
+                <Border Background="{StaticResource PurpleColor}" 
+                        Margin="0,0,0,10" Padding="10">
+                    <TextBlock Text="УПРАВЛЕНИЕ ПРЕПОДАВАТЕЛЯМИ" 
+                             Foreground="White"
+                             FontSize="16"
+                             FontWeight="Bold"/>
+                </Border>
+
+                <StackPanel Orientation="Horizontal" Margin="5">
+                    <TextBlock Text="Имя преподавателя:" VerticalAlignment="Center"/>
+                    <TextBox x:Name="txtTeacherName" Width="200"/>
+                    <TextBlock Text="Должность:" VerticalAlignment="Center" Margin="10,0,0,0"/>
+                    <TextBox x:Name="txtTeacherPosition" Width="150"/>
+                    <Button x:Name="btnAddTeacher" Content="Добавить преподавателя" 
+                            Click="BtnAddTeacher_Click" Margin="10,0,0,0"/>
+                </StackPanel>
+
+                <DataGrid x:Name="dgTeachers" AutoGenerateColumns="False" Height="400">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="50"/>
+                        <DataGridTextColumn Header="Имя" Binding="{Binding Name}" Width="*"/>
+                        <DataGridTextColumn Header="Должность" Binding="{Binding Position}" Width="150"/>
+                        <DataGridTemplateColumn Header="Действия" Width="100">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button Content="Удалить" Click="DeleteTeacher_Click"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </StackPanel>
+
+            <!-- Предметы -->
             <StackPanel x:Name="subjectsPanel" Visibility="Collapsed">
+                <Border Background="{StaticResource PurpleColor}" 
+                        Margin="0,0,0,10" Padding="10">
+                    <TextBlock Text="УПРАВЛЕНИЕ ПРЕДМЕТАМИ" 
+                             Foreground="White"
+                             FontSize="16"
+                             FontWeight="Bold"/>
+                </Border>
+
                 <StackPanel Orientation="Horizontal" Margin="5">
                     <TextBlock Text="Название предмета:" VerticalAlignment="Center"/>
-                    <TextBox x:Name="txtSubjectName" Width="200"/>
-                    <Button x:Name="btnAddSubject" Content="Добавить" Click="BtnAddSubject_Click"/>
+                    <TextBox x:Name="txtSubjectName" Width="250"/>
+                    <TextBlock Text="Преподаватель:" VerticalAlignment="Center" Margin="10,0,0,0"/>
+                    <ComboBox x:Name="cbTeacherForSubject" DisplayMemberPath="Name" Width="200"/>
+                    <Button x:Name="btnAddSubject" Content="Добавить предмет" 
+                            Click="BtnAddSubject_Click" Margin="10,0,0,0"/>
                 </StackPanel>
 
                 <DataGrid x:Name="dgSubjects" AutoGenerateColumns="False" Height="400">
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="50"/>
                         <DataGridTextColumn Header="Название" Binding="{Binding Name}" Width="*"/>
+                        <DataGridTextColumn Header="Преподаватель" Binding="{Binding TeacherName}" Width="200"/>
                         <DataGridTemplateColumn Header="Действия" Width="100">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
@@ -100,25 +189,34 @@
                 </DataGrid>
             </StackPanel>
 
-         
+            <!-- Оценки -->
             <StackPanel x:Name="gradesPanel" Visibility="Collapsed">
+                <Border Background="{StaticResource PurpleColor}" 
+                        Margin="0,0,0,10" Padding="10">
+                    <TextBlock Text="УПРАВЛЕНИЕ ОЦЕНКАМИ" 
+                             Foreground="White"
+                             FontSize="16"
+                             FontWeight="Bold"/>
+                </Border>
+
                 <StackPanel Orientation="Horizontal" Margin="5">
-                    <ComboBox x:Name="cbStudentForGrade" DisplayMemberPath="Name" Width="150"/>
-                    <ComboBox x:Name="cbSubjectForGrade" DisplayMemberPath="Name" Width="150" Margin="10,0,0,0"/>
+                    <ComboBox x:Name="cbStudentForGrade" DisplayMemberPath="Name" Width="180"/>
+                    <ComboBox x:Name="cbSubjectForGrade" DisplayMemberPath="Name" Width="180" Margin="10,0,0,0"/>
                     <TextBlock Text="Оценка:" VerticalAlignment="Center" Margin="10,0,0,0"/>
-                    <ComboBox x:Name="cbGradeValue" Width="60">
+                    <ComboBox x:Name="cbGradeValue" Width="80" Margin="10,0,0,0">
                         <ComboBoxItem>2</ComboBoxItem>
                         <ComboBoxItem>3</ComboBoxItem>
                         <ComboBoxItem>4</ComboBoxItem>
                         <ComboBoxItem>5</ComboBoxItem>
                     </ComboBox>
-                    <Button x:Name="btnAddGrade" Content="Добавить оценку" Click="BtnAddGrade_Click" Margin="10,0,0,0"/>
+                    <Button x:Name="btnAddGrade" Content="Добавить оценку" 
+                            Click="BtnAddGrade_Click" Margin="10,0,0,0"/>
                 </StackPanel>
 
                 <DataGrid x:Name="dgGrades" AutoGenerateColumns="False" Height="350">
                     <DataGrid.Columns>
-                        <DataGridTextColumn Header="Студент" Binding="{Binding StudentName}" Width="150"/>
-                        <DataGridTextColumn Header="Предмет" Binding="{Binding SubjectName}" Width="150"/>
+                        <DataGridTextColumn Header="Студент" Binding="{Binding StudentName}" Width="180"/>
+                        <DataGridTextColumn Header="Предмет" Binding="{Binding SubjectName}" Width="180"/>
                         <DataGridTextColumn Header="Оценка" Binding="{Binding Value}" Width="80"/>
                         <DataGridTextColumn Header="Дата" Binding="{Binding Date, StringFormat=dd.MM.yyyy}" Width="100"/>
                         <DataGridTemplateColumn Header="Действия" Width="100">
@@ -132,20 +230,30 @@
                 </DataGrid>
             </StackPanel>
 
-            
+            <!-- Посещаемость -->
             <StackPanel x:Name="attendancePanel" Visibility="Collapsed">
+                <Border Background="{StaticResource PurpleColor}" 
+                        Margin="0,0,0,10" Padding="10">
+                    <TextBlock Text="УЧЁТ ПОСЕЩАЕМОСТИ" 
+                             Foreground="White"
+                             FontSize="16"
+                             FontWeight="Bold"/>
+                </Border>
+
                 <StackPanel Orientation="Horizontal" Margin="5">
-                    <ComboBox x:Name="cbStudentForAttendance" DisplayMemberPath="Name" Width="150"/>
-                    <ComboBox x:Name="cbSubjectForAttendance" DisplayMemberPath="Name" Width="150" Margin="10,0,0,0"/>
-                    <DatePicker x:Name="dpAttendanceDate" Width="120" Margin="10,0,0,0"/>
-                    <CheckBox x:Name="cbIsPresent" Content="Присутствовал" Margin="10,0,0,0" VerticalAlignment="Center"/>
-                    <Button x:Name="btnAddAttendance" Content="Добавить запись" Click="BtnAddAttendance_Click" Margin="10,0,0,0"/>
+                    <ComboBox x:Name="cbStudentForAttendance" DisplayMemberPath="Name" Width="180"/>
+                    <ComboBox x:Name="cbSubjectForAttendance" DisplayMemberPath="Name" Width="180" Margin="10,0,0,0"/>
+                    <DatePicker x:Name="dpAttendanceDate" Width="150" Margin="10,0,0,0"/>
+                    <CheckBox x:Name="cbIsPresent" Content="Присутствовал" Margin="10,0,0,0" VerticalAlignment="Center"
+                              Foreground="White"/>
+                    <Button x:Name="btnAddAttendance" Content="Добавить запись" 
+                            Click="BtnAddAttendance_Click" Margin="10,0,0,0"/>
                 </StackPanel>
 
-                <DataGrid x:Name="dgAttendance" AutoGenerateColumns="False" Height="350">
+                <DataGrid x:Name="dgAttendance" AutoGenerateColumns="False" Height="300">
                     <DataGrid.Columns>
-                        <DataGridTextColumn Header="Студент" Binding="{Binding StudentName}" Width="150"/>
-                        <DataGridTextColumn Header="Предмет" Binding="{Binding SubjectName}" Width="150"/>
+                        <DataGridTextColumn Header="Студент" Binding="{Binding StudentName}" Width="180"/>
+                        <DataGridTextColumn Header="Предмет" Binding="{Binding SubjectName}" Width="180"/>
                         <DataGridTextColumn Header="Дата" Binding="{Binding Date, StringFormat=dd.MM.yyyy}" Width="100"/>
                         <DataGridCheckBoxColumn Header="Присутствовал" Binding="{Binding IsPresent}" Width="100"/>
                         <DataGridTemplateColumn Header="Действия" Width="100">
@@ -158,10 +266,16 @@
                     </DataGrid.Columns>
                 </DataGrid>
 
-                <StackPanel Margin="5">
-                    <TextBlock Text="Статистика посещаемости:" FontWeight="Bold"/>
-                    <TextBlock x:Name="tbAttendanceStats"/>
-                </StackPanel>
+                <!-- Статистика -->
+                <Border Margin="5" BorderBrush="{StaticResource PurpleColor}" 
+                        BorderThickness="1" Padding="10" Background="#222222">
+                    <StackPanel>
+                        <TextBlock Text="СТАТИСТИКА ПОСЕЩАЕМОСТИ:" 
+                                 FontWeight="Bold" FontSize="14"/>
+                        <TextBlock x:Name="tbAttendanceStats" Margin="5,10,5,5" 
+                                 FontSize="13"/>
+                    </StackPanel>
+                </Border>
             </StackPanel>
         </Grid>
     </Grid>

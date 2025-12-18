@@ -10,6 +10,7 @@ namespace Jornal2
     public partial class MainWindow : Window
     {
         private ObservableCollection<Student> students = new ObservableCollection<Student>();
+        private ObservableCollection<Teacher> teachers = new ObservableCollection<Teacher>();
         private ObservableCollection<Subject> subjects = new ObservableCollection<Subject>();
         private ObservableCollection<Grade> grades = new ObservableCollection<Grade>();
         private ObservableCollection<Attendance> attendanceRecords = new ObservableCollection<Attendance>();
@@ -23,6 +24,7 @@ namespace Jornal2
 
         private void InitializeData()
         {
+            // Добавляем студентов
             students.Add(new Student { Id = 1, Name = "Антонов Арсений", Group = "Группа РПО-23/1" });
             students.Add(new Student { Id = 2, Name = "Духина Анастасия", Group = "Группа РПО-23/1" });
             students.Add(new Student { Id = 3, Name = "Землянский Денис", Group = "Группа РПО-23/1" });
@@ -32,23 +34,92 @@ namespace Jornal2
             students.Add(new Student { Id = 7, Name = "Метелицен Захар", Group = "Группа РПО-23/1" });
             students.Add(new Student { Id = 8, Name = "Юнусов Юсуф", Group = "Группа РПО-23/1" });
 
+            // Добавляем преподавателей
+            teachers.Add(new Teacher { Id = 1, Name = "Зимен Павел Василевич", Position = "Преподователь информатики" });
+            teachers.Add(new Teacher { Id = 2, Name = "Савенко Лидия Алексеевна ", Position = "РПО" });
+            teachers.Add(new Teacher { Id = 3, Name = "Микулов Антон Владимирович", Position = "Основы философии" });
 
-            subjects.Add(new Subject { Id = 1, Name = "Системное программирование " });
-            subjects.Add(new Subject { Id = 2, Name = "Основы философии" });
-            subjects.Add(new Subject { Id = 3, Name = "Упровление программными проектами" });
-            subjects.Add(new Subject { Id = 3, Name = "Основы алгоритмизации и программирования" });
-            subjects.Add(new Subject { Id = 3, Name = "Менеджемет в профисеональной деетельности" });
+            // Добавляем предметы (исправлены ID)
+            subjects.Add(new Subject { Id = 1, Name = "Системное программирование", TeacherId = 1, TeacherName = "Зимен Павел Василевич" });
+            subjects.Add(new Subject { Id = 2, Name = "Основы философии", TeacherId = 2, TeacherName = "Микулов Антон Владимирович" });
+            subjects.Add(new Subject { Id = 3, Name = "Управление программными проектами", TeacherId = 3, TeacherName = "Зимен Павел Василевич" });
+            subjects.Add(new Subject { Id = 4, Name = "Основы алгоритмизации и программирования", TeacherId = 1, TeacherName = "Зимен Павел Василевич" });
+            subjects.Add(new Subject { Id = 5, Name = "Менеджмент в профессиональной деятельности", TeacherId = 2, TeacherName = "Савенко Лидия Алексеевна" });
 
-          
-
+            // Привязка данных
             dgStudents.ItemsSource = students;
+            dgTeachers.ItemsSource = teachers;
             dgSubjects.ItemsSource = subjects;
             dgGrades.ItemsSource = grades;
             dgAttendance.ItemsSource = attendanceRecords;
 
+            // Обновление ComboBox
             UpdateComboBoxes();
         }
 
+        private void UpdateComboBoxes()
+        {
+            cbStudentForGrade.ItemsSource = students;
+            cbStudentForAttendance.ItemsSource = students;
+            cbSubjectForGrade.ItemsSource = subjects;
+            cbSubjectForAttendance.ItemsSource = subjects;
+            cbTeacherForSubject.ItemsSource = teachers;
+        }
+
+        // Методы навигации
+        private void ShowStudentsPanel()
+        {
+            studentsPanel.Visibility = Visibility.Visible;
+            teachersPanel.Visibility = Visibility.Collapsed;
+            subjectsPanel.Visibility = Visibility.Collapsed;
+            gradesPanel.Visibility = Visibility.Collapsed;
+            attendancePanel.Visibility = Visibility.Collapsed;
+        }
+
+        private void ShowTeachersPanel()
+        {
+            studentsPanel.Visibility = Visibility.Collapsed;
+            teachersPanel.Visibility = Visibility.Visible;
+            subjectsPanel.Visibility = Visibility.Collapsed;
+            gradesPanel.Visibility = Visibility.Collapsed;
+            attendancePanel.Visibility = Visibility.Collapsed;
+        }
+
+        private void ShowSubjectsPanel()
+        {
+            studentsPanel.Visibility = Visibility.Collapsed;
+            teachersPanel.Visibility = Visibility.Collapsed;
+            subjectsPanel.Visibility = Visibility.Visible;
+            gradesPanel.Visibility = Visibility.Collapsed;
+            attendancePanel.Visibility = Visibility.Collapsed;
+        }
+
+        private void ShowGradesPanel()
+        {
+            studentsPanel.Visibility = Visibility.Collapsed;
+            teachersPanel.Visibility = Visibility.Collapsed;
+            subjectsPanel.Visibility = Visibility.Collapsed;
+            gradesPanel.Visibility = Visibility.Visible;
+            attendancePanel.Visibility = Visibility.Collapsed;
+        }
+
+        private void ShowAttendancePanel()
+        {
+            studentsPanel.Visibility = Visibility.Collapsed;
+            teachersPanel.Visibility = Visibility.Collapsed;
+            subjectsPanel.Visibility = Visibility.Collapsed;
+            gradesPanel.Visibility = Visibility.Collapsed;
+            attendancePanel.Visibility = Visibility.Visible;
+        }
+
+        // Обработчики кнопок навигации
+        private void BtnStudents_Click(object sender, RoutedEventArgs e) => ShowStudentsPanel();
+        private void BtnTeachers_Click(object sender, RoutedEventArgs e) => ShowTeachersPanel();
+        private void BtnSubjects_Click(object sender, RoutedEventArgs e) => ShowSubjectsPanel();
+        private void BtnGrades_Click(object sender, RoutedEventArgs e) => ShowGradesPanel();
+        private void BtnAttendance_Click(object sender, RoutedEventArgs e) => ShowAttendancePanel();
+
+        // Добавление студента
         private void BtnAddStudent_Click(object sender, RoutedEventArgs e)
         {
             if (string.IsNullOrWhiteSpace(txtStudentName.Text))
@@ -59,10 +130,8 @@ namespace Jornal2
 
             int newId = students.Count > 0 ? students.Max(s => s.Id) + 1 : 1;
 
-            
             string groupName = txtStudentGroup.Text.Trim();
 
-     
             if (!string.IsNullOrEmpty(groupName))
             {
                 if (!groupName.StartsWith("Группа", StringComparison.OrdinalIgnoreCase))
@@ -87,95 +156,11 @@ namespace Jornal2
             UpdateComboBoxes();
         }
 
-       
-
-       
-        private void TxtStudentGroup_PreviewTextInput(object sender, TextCompositionEventArgs e)
-        {
-        
-            foreach (char c in e.Text)
-            {
-                if (!char.IsDigit(c) && !char.IsLetter(c))
-                {
-                    e.Handled = true;
-                    return;
-                }
-            }
-        }
-
-        private void UpdateComboBoxes()
-        {
-            cbStudentForGrade.ItemsSource = students;
-            cbStudentForAttendance.ItemsSource = students;
-            cbSubjectForGrade.ItemsSource = subjects;
-            cbSubjectForAttendance.ItemsSource = subjects;
-        }
-
-        private void ShowStudentsPanel()
-        {
-            studentsPanel.Visibility = Visibility.Visible;
-            subjectsPanel.Visibility = Visibility.Collapsed;
-            gradesPanel.Visibility = Visibility.Collapsed;
-            attendancePanel.Visibility = Visibility.Collapsed;
-        }
-
-        private void ShowSubjectsPanel()
-        {
-            studentsPanel.Visibility = Visibility.Collapsed;
-            subjectsPanel.Visibility = Visibility.Visible;
-            gradesPanel.Visibility = Visibility.Collapsed;
-            attendancePanel.Visibility = Visibility.Collapsed;
-        }
-
-        private void ShowGradesPanel()
-        {
-            studentsPanel.Visibility = Visibility.Collapsed;
-            subjectsPanel.Visibility = Visibility.Collapsed;
-            gradesPanel.Visibility = Visibility.Visible;
-            attendancePanel.Visibility = Visibility.Collapsed;
-        }
-
-        private void ShowAttendancePanel()
-        {
-            studentsPanel.Visibility = Visibility.Collapsed;
-            subjectsPanel.Visibility = Visibility.Collapsed;
-            gradesPanel.Visibility = Visibility.Collapsed;
-            attendancePanel.Visibility = Visibility.Visible;
-        }
-
-     
-        private void BtnStudents_Click(object sender, RoutedEventArgs e) => ShowStudentsPanel();
-        private void BtnSubjects_Click(object sender, RoutedEventArgs e) => ShowSubjectsPanel();
-        private void BtnGrades_Click(object sender, RoutedEventArgs e) => ShowGradesPanel();
-        private void BtnAttendance_Click(object sender, RoutedEventArgs e) => ShowAttendancePanel();
-
-        
-        private void BtAddStudent_Click(object sender, RoutedEventArgs e)
-        {
-            if (string.IsNullOrWhiteSpace(txtStudentName.Text))
-            {
-                MessageBox.Show("Введите имя студента");
-                return;
-            }
-
-            int newId = students.Count > 0 ? students.Max(s => s.Id) + 1 : 1;
-            students.Add(new Student
-            {
-                Id = newId,
-                Name = txtStudentName.Text,
-                Group = txtStudentGroup.Text
-            });
-
-            txtStudentName.Clear();
-            txtStudentGroup.Clear();
-            UpdateComboBoxes();
-        }
-
+        // Удаление студента
         private void DeleteStudent_Click(object sender, RoutedEventArgs e)
         {
             if (dgStudents.SelectedItem is Student student)
             {
-           
                 var gradesToRemove = grades.Where(g => g.StudentId == student.Id).ToList();
                 foreach (var grade in gradesToRemove)
                 {
@@ -193,7 +178,60 @@ namespace Jornal2
             }
         }
 
-      
+        // Добавление преподавателя
+        private void BtnAddTeacher_Click(object sender, RoutedEventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(txtTeacherName.Text))
+            {
+                MessageBox.Show("Введите имя преподавателя");
+                return;
+            }
+
+            int newId = teachers.Count > 0 ? teachers.Max(t => t.Id) + 1 : 1;
+
+            teachers.Add(new Teacher
+            {
+                Id = newId,
+                Name = txtTeacherName.Text,
+                Position = txtTeacherPosition.Text
+            });
+
+            txtTeacherName.Clear();
+            txtTeacherPosition.Clear();
+            UpdateComboBoxes();
+        }
+
+        // Удаление преподавателя
+        private void DeleteTeacher_Click(object sender, RoutedEventArgs e)
+        {
+            if (dgTeachers.SelectedItem is Teacher teacher)
+            {
+                // Удаляем предметы, которые вел этот преподаватель
+                var subjectsToRemove = subjects.Where(s => s.TeacherId == teacher.Id).ToList();
+                foreach (var subject in subjectsToRemove)
+                {
+                    // Удаляем оценки и посещаемость по этим предметам
+                    var gradesToRemove = grades.Where(g => g.SubjectId == subject.Id).ToList();
+                    foreach (var grade in gradesToRemove)
+                    {
+                        grades.Remove(grade);
+                    }
+
+                    var attendanceToRemove = attendanceRecords.Where(a => a.SubjectId == subject.Id).ToList();
+                    foreach (var attendance in attendanceToRemove)
+                    {
+                        attendanceRecords.Remove(attendance);
+                    }
+
+                    subjects.Remove(subject);
+                }
+
+                teachers.Remove(teacher);
+                UpdateComboBoxes();
+            }
+        }
+
+        // Добавление предмета
         private void BtnAddSubject_Click(object sender, RoutedEventArgs e)
         {
             if (string.IsNullOrWhiteSpace(txtSubjectName.Text))
@@ -202,22 +240,33 @@ namespace Jornal2
                 return;
             }
 
+            if (cbTeacherForSubject.SelectedItem == null)
+            {
+                MessageBox.Show("Выберите преподавателя");
+                return;
+            }
+
             int newId = subjects.Count > 0 ? subjects.Max(s => s.Id) + 1 : 1;
+            var teacher = cbTeacherForSubject.SelectedItem as Teacher;
+
             subjects.Add(new Subject
             {
                 Id = newId,
-                Name = txtSubjectName.Text
+                Name = txtSubjectName.Text,
+                TeacherId = teacher.Id,
+                TeacherName = teacher.Name
             });
 
             txtSubjectName.Clear();
+            cbTeacherForSubject.SelectedIndex = -1;
             UpdateComboBoxes();
         }
 
+        // Удаление предмета
         private void DeleteSubject_Click(object sender, RoutedEventArgs e)
         {
             if (dgSubjects.SelectedItem is Subject subject)
             {
-       
                 var gradesToRemove = grades.Where(g => g.SubjectId == subject.Id).ToList();
                 foreach (var grade in gradesToRemove)
                 {
@@ -235,6 +284,7 @@ namespace Jornal2
             }
         }
 
+        // Добавление оценки
         private void BtnAddGrade_Click(object sender, RoutedEventArgs e)
         {
             if (cbStudentForGrade.SelectedItem == null || cbSubjectForGrade.SelectedItem == null)
@@ -267,6 +317,7 @@ namespace Jornal2
             });
         }
 
+        // Удаление оценки
         private void DeleteGrade_Click(object sender, RoutedEventArgs e)
         {
             if (dgGrades.SelectedItem is Grade grade)
@@ -275,7 +326,7 @@ namespace Jornal2
             }
         }
 
-        
+        // Добавление посещаемости
         private void BtnAddAttendance_Click(object sender, RoutedEventArgs e)
         {
             if (cbStudentForAttendance.SelectedItem == null || cbSubjectForAttendance.SelectedItem == null)
@@ -310,6 +361,7 @@ namespace Jornal2
             UpdateAttendanceStats(student.Id, subject.Id);
         }
 
+        // Удаление посещаемости
         private void DeleteAttendance_Click(object sender, RoutedEventArgs e)
         {
             if (dgAttendance.SelectedItem is Attendance attendance)
@@ -318,6 +370,7 @@ namespace Jornal2
             }
         }
 
+        // Обновление статистики посещаемости
         private void UpdateAttendanceStats(int studentId, int subjectId)
         {
             var studentRecords = attendanceRecords
@@ -334,9 +387,22 @@ namespace Jornal2
                                        $"Процент посещаемости: {percentage:F1}%";
             }
         }
+
+        // Валидация ввода группы
+        private void TxtStudentGroup_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            foreach (char c in e.Text)
+            {
+                if (!char.IsDigit(c) && !char.IsLetter(c))
+                {
+                    e.Handled = true;
+                    return;
+                }
+            }
+        }
     }
 
-
+    // Классы моделей
     public class Student
     {
         public int Id { get; set; }
@@ -344,10 +410,19 @@ namespace Jornal2
         public string Group { get; set; }
     }
 
+    public class Teacher
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public string Position { get; set; }
+    }
+
     public class Subject
     {
         public int Id { get; set; }
         public string Name { get; set; }
+        public int TeacherId { get; set; }
+        public string TeacherName { get; set; }
     }
 
     public class Grade
