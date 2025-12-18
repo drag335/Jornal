@@ -10,14 +10,27 @@ using System.Windows.Forms;
 
 namespace Учетуспеваемоси
 {
-    public partial class assessments : Form
+    public partial class Assessments : Form
     {
-        public assessments()
+        public Assessments()
         {
             InitializeComponent();
         }
 
         private void button1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+            comboBox1.DropDownStyle = ComboBoxStyle.DropDownList;
+
+
+        }
+
+        private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
         {
 
         }

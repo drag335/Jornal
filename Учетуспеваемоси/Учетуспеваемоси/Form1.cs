@@ -31,7 +31,7 @@ namespace Учетуспеваемоси
 
             MessageBox.Show("проверка работы ");
 
-            assessments assessment = new assessments();
+            Assessments assessment = new Assessments();
             assessment.Show();
             this.Close();
         }
