@@ -402,48 +402,4 @@ namespace Jornal2
         }
     }
 
-    // Классы моделей
-    public class Student
-    {
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public string Group { get; set; }
-    }
-
-    public class Teacher
-    {
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public string Position { get; set; }
-    }
-
-    public class Subject
-    {
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public int TeacherId { get; set; }
-        public string TeacherName { get; set; }
-    }
-
-    public class Grade
-    {
-        public int Id { get; set; }
-        public int StudentId { get; set; }
-        public string StudentName { get; set; }
-        public int SubjectId { get; set; }
-        public string SubjectName { get; set; }
-        public int Value { get; set; }
-        public DateTime Date { get; set; }
-    }
-
-    public class Attendance
-    {
-        public int Id { get; set; }
-        public int StudentId { get; set; }
-        public string StudentName { get; set; }
-        public int SubjectId { get; set; }
-        public string SubjectName { get; set; }
-        public DateTime Date { get; set; }
-        public bool IsPresent { get; set; }
-    }
 }
